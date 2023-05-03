@@ -17,6 +17,17 @@ class StackOverflowAPI
         $url = "/questions?order=desc&sort=activity&site=stackoverflow";
         return $this->get_data_curl( $url, 'GET');
     }
+    private function is_timestamp($timestamp) {
+        if(strtotime(date('d-m-Y H:i:s',$timestamp)) === (int)$timestamp) {
+            return $timestamp;
+        } else return false;
+    }
+    public function setFromDate( string $fromDate ){
+        $timestamp = strtotime($fromDate);
+        if ( $this->is_timestamp( $timestamp ) ){
+            $this->filters['fromdate'] = $timestamp;
+        }
+    }
     private function get_endpoint_with_filters( $endpoint ){
         $endpoint .= '&tagged='.$this->filters['tagged'];
         return $endpoint;

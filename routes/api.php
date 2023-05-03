@@ -21,8 +21,8 @@ use App\Http\Resources\StackOverflowAPI;
 use App\Http\Resources\StackOverflowResource;
 
 
-Route::get('/v1/stackoverflow/questions/{tagged}', function (string $tagged) {
+Route::get('/v1/stackoverflow/questions/{tagged}/{fromdate?}', function (string $tagged, string $fromDate="") {
     $questionStackOverflow = new StackOverflowAPI( $tagged );
-
+    $questionStackOverflow->setFromDate( $fromDate );
     return new StackOverflowResource( $questionStackOverflow->getQuestions() );
 });
