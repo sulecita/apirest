@@ -17,3 +17,11 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+use App\Http\Resources\StackOverflowAPI;
+use App\Http\Resources\StackOverflowResource;
+
+
+Route::get('/v1/stackoverflow/questions', function () {
+    $questionStackOverflow = new StackOverflowAPI();
+    return new StackOverflowResource( $questionStackOverflow->getQuestions() );
+});
