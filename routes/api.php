@@ -21,7 +21,8 @@ use App\Http\Resources\StackOverflowAPI;
 use App\Http\Resources\StackOverflowResource;
 
 
-Route::get('/v1/stackoverflow/questions', function () {
-    $questionStackOverflow = new StackOverflowAPI();
+Route::get('/v1/stackoverflow/questions/{tagged}', function (string $tagged) {
+    $questionStackOverflow = new StackOverflowAPI( $tagged );
+
     return new StackOverflowResource( $questionStackOverflow->getQuestions() );
 });

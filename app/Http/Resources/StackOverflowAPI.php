@@ -5,8 +5,10 @@ namespace App\Http\Resources;
 class StackOverflowAPI
 {
     var $endpoint_base = "https://api.stackexchange.com/2.3";
-    public function __construct()
+    var $filters = [];
+    public function __construct( string $tagged )
     {
+        $this->filters['tagged'] = $tagged;
     }
     public function getQuestionByTag( Request $request ){
         return $request;
@@ -15,9 +17,13 @@ class StackOverflowAPI
         $url = "/questions?order=desc&sort=activity&site=stackoverflow";
         return $this->get_data_curl( $url, 'GET');
     }
+    private function get_endpoint_with_filters( $endpoint ){
+        $endpoint .= '&tagged='.$this->filters['tagged'];
+        return $endpoint;
+    }
     private function get_data_curl( $endpoint, $request, $dataRequest="" ){
         $header = array(  );
-        $endpoint = $this->endpoint_base.$endpoint;
+        $endpoint = $this->endpoint_base.$this->get_endpoint_with_filters( $endpoint );
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => $endpoint,
