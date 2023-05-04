@@ -14,7 +14,7 @@ class StackOverflowAPI
         return $request;
     }
     public function getQuestions(){
-        $url = "/questions?order=desc&sort=activity&site=stackoverflow";
+        $url = "/questions?order=asc&sort=activity&site=stackoverflow";
         return $this->get_data_curl( $url, 'GET');
     }
     private function is_timestamp($timestamp) {
@@ -28,8 +28,20 @@ class StackOverflowAPI
             $this->filters['fromdate'] = $timestamp;
         }
     }
+    public function setToDate( string $toDate ){
+        $timestamp = strtotime($toDate);
+        if ( $this->is_timestamp( $timestamp ) ){
+            $this->filters['todate'] = $timestamp;
+        }
+    }
     private function get_endpoint_with_filters( $endpoint ){
         $endpoint .= '&tagged='.$this->filters['tagged'];
+        if(isset( $this->filters['fromdate'] )){
+            $endpoint .= '&fromdate='.$this->filters['fromdate'];
+        }
+        if(isset( $this->filters['todate'] )){
+            $endpoint .= '&todate='.$this->filters['todate'];
+        }
         return $endpoint;
     }
     private function get_data_curl( $endpoint, $request, $dataRequest="" ){
